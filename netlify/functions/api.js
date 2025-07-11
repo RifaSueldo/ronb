@@ -52,10 +52,9 @@ exports.handler = async function(event, context) {
     };
 
   } catch (error) {
-    console.error(error);
     return {
-      statusCode: 500,
-      body: JSON.stringify({ respuesta: 'Algo salió mal, Ronco.' }),
-    };
+  statusCode: 500,
+  body: JSON.stringify({ respuesta: 'Error interno: ' + error.message }),
+};
   }
 };
