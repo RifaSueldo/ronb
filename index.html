@@ -10,7 +10,6 @@
       background: #111;
       color: #fff;
     }
-
     #ronbutton {
       position: fixed;
       bottom: 20px;
@@ -26,7 +25,6 @@
       box-shadow: 0 0 10px #aaa;
       z-index: 9999;
     }
-
     #dialogo {
       position: fixed;
       bottom: 110px;
@@ -41,7 +39,6 @@
       box-shadow: 0 0 15px #000;
       z-index: 9999;
     }
-
     input[type="text"] {
       width: 100%;
       padding: 10px;
@@ -51,7 +48,6 @@
       color: #fff;
       border-radius: 5px;
     }
-
     .respuesta {
       background: #333;
       padding: 10px;
@@ -99,12 +95,15 @@
     try {
       const response = await fetch("/.netlify/functions/api", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({ pregunta })
       });
 
       const data = await response.json();
-      return data.respuesta || "No te pude responder, Ronco.";
+
+      return data.respuesta || "No pude responderte esta vez, Ronco.";
     } catch (err) {
       return "No tengo señal, Ronco. Probá de nuevo en un rato.";
     }
