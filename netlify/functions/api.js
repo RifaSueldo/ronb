@@ -18,7 +18,7 @@ exports.handler = async function(event, context) {
     console.log('Preguntaste:', pregunta);
 
    const response = await fetch(
-  'https://api-inference.huggingface.co/models/bigcode/starcoderbase',
+  'https://api-inference.huggingface.co/models/google/flan-t5-small',
       {
         method: 'POST',
         headers: {
