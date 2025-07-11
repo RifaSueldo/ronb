@@ -16,7 +16,7 @@ exports.handler = async function(event, context) {
     }
 
     const response = await fetch(
-      'https://api-inference.huggingface.co/models/gpt2',
+      'https://api-inference.huggingface.co/models/tiiuae/falcon-rw-1b',
       {
         method: 'POST',
         headers: {
@@ -27,14 +27,14 @@ exports.handler = async function(event, context) {
       }
     );
 
+    const data = await response.json();
+
     if (!response.ok) {
       return {
         statusCode: 500,
-        body: JSON.stringify({ respuesta: 'Ronco está medio caído, probá más tarde.' }),
+        body: JSON.stringify({ respuesta: 'Error interno: ' + JSON.stringify(data.error || data) }),
       };
     }
-
-    const data = await response.json();
 
     let respuesta = '';
 
@@ -53,8 +53,8 @@ exports.handler = async function(event, context) {
 
   } catch (error) {
     return {
-  statusCode: 500,
-  body: JSON.stringify({ respuesta: 'Error interno: ' + error.message }),
-};
+      statusCode: 500,
+      body: JSON.stringify({ respuesta: 'Error interno: ' + error.message }),
+    };
   }
 };
