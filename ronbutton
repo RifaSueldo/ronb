@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>RONBUTTON</title>
+  <title>RONBUTTON IA</title>
   <style>
     body {
       margin: 0;
@@ -24,6 +24,7 @@
       color: #fff;
       cursor: pointer;
       box-shadow: 0 0 10px #aaa;
+      z-index: 9999;
     }
 
     #dialogo {
@@ -33,15 +34,12 @@
       background: #222;
       padding: 15px;
       border-radius: 10px;
-      width: 300px;
+      width: 320px;
       max-height: 400px;
       overflow-y: auto;
       display: none;
       box-shadow: 0 0 15px #000;
-    }
-
-    #dialogo p {
-      margin: 10px 0;
+      z-index: 9999;
     }
 
     input[type="text"] {
@@ -60,12 +58,7 @@
       border-radius: 5px;
       margin-top: 10px;
       font-size: 14px;
-    }
-
-    .versiculo {
-      font-style: italic;
-      color: #ccc;
-      margin-top: 5px;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -90,42 +83,44 @@
     input.focus();
   };
 
-  input.addEventListener('keypress', function (e) {
+  input.addEventListener('keypress', async function (e) {
     if (e.key === 'Enter') {
       const pregunta = input.value.trim();
       if (pregunta !== '') {
-        mostrarRespuesta(pregunta);
+        mostrarRespuesta("Pensando...", true);
+        const respuesta = await pedirRespuesta(pregunta);
+        mostrarRespuesta(respuesta);
         input.value = '';
       }
     }
   });
 
-  function mostrarRespuesta(pregunta) {
-    const lower = pregunta.toLowerCase();
-    let respuesta = '';
-    let versiculo = '';
+  async function pedirRespuesta(pregunta) {
+    try {
+      const response = await fetch("/.netlify/functions/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ pregunta })
+      });
 
-    if (lower.includes('no doy más') || lower.includes('agotado') || lower.includes('estoy cansado')) {
-      respuesta = 'Lo sé. Te pesa todo encima y no te alcanza el alma. Pero no estás solo, ni derrotado. Solo necesitás aflojar un rato y que alguien te vea de verdad.';
-      versiculo = '“Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.” (Mateo 11:28)';
-    } else if (lower.includes('no me alcanza la plata')) {
-      respuesta = 'No es culpa tuya si el mundo está hecho para que corras y no llegues. No te tragues la culpa: esto es sistema, no fracaso personal.';
-      versiculo = '“Mi Dios, pues, suplirá todo lo que os falta conforme a sus riquezas en gloria en Cristo Jesús.” (Filipenses 4:19)';
-    } else if (lower.includes('mi familia') || lower.includes('mis hijos')) {
-      respuesta = 'Tu amor por ellos no se mide en plata ni en resultados. Ellos te miran y ven fuerza, aunque vos te sientas roto.';
-      versiculo = '“Instruye al niño en su camino, y aun cuando fuere viejo no se apartará de él.” (Proverbios 22:6)';
-    } else {
-      respuesta = 'No tengo todas las respuestas. Pero si llegaste hasta este botón, es porque algo adentro tuyo todavía quiere seguir.';
-      versiculo = '“El Señor está cerca de los quebrantados de corazón; y salva a los contritos de espíritu.” (Salmo 34:18)';
+      const data = await response.json();
+      return data.respuesta || "No pude responderte esta vez, Ronco.";
+    } catch (err) {
+      return "No tengo señal, Ronco. Probá de nuevo en un rato.";
     }
+  }
 
-    const block = document.createElement('div');
-    block.className = 'respuesta';
-    block.innerHTML = `
-      <div>${respuesta}</div>
-      <div class="versiculo">${versiculo}</div>
-    `;
-    respuestaContainer.prepend(block);
+  function mostrarRespuesta(texto, reemplazar = false) {
+    if (reemplazar && respuestaContainer.firstChild) {
+      respuestaContainer.firstChild.textContent = texto;
+    } else {
+      const block = document.createElement('div');
+      block.className = 'respuesta';
+      block.textContent = texto;
+      respuestaContainer.prepend(block);
+    }
   }
 </script>
 
