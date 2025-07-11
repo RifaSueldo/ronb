@@ -18,7 +18,7 @@ exports.handler = async function(event, context) {
     console.log('Preguntaste:', pregunta);
 
     const response = await fetch(
-      'https://api-inference.huggingface.co/models/gpt2',
+      'https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta',
       {
         method: 'POST',
         headers: {
