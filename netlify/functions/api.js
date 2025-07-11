@@ -16,7 +16,7 @@ exports.handler = async function(event, context) {
     }
 
     const response = await fetch(
-      'https://api-inference.huggingface.co/models/tiiuae/falcon-rw-1b',
+      'https://api-inference.huggingface.co/models/bigscience/bloomz-560m',
       {
         method: 'POST',
         headers: {
@@ -36,15 +36,9 @@ exports.handler = async function(event, context) {
       };
     }
 
-    let respuesta = '';
-
-    if (Array.isArray(data) && data[0].generated_text) {
-      respuesta = data[0].generated_text;
-    } else if (data.generated_text) {
-      respuesta = data.generated_text;
-    } else {
-      respuesta = 'No entendí, Ronco.';
-    }
+    const respuesta = Array.isArray(data) && data[0].generated_text
+      ? data[0].generated_text
+      : 'No entendí, Ronco.';
 
     return {
       statusCode: 200,
