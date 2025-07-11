@@ -96,21 +96,20 @@
   });
 
   async function pedirRespuesta(pregunta) {
-    try {
-      const response = await fetch("/.netlify/functions/api", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ pregunta })
-      });
+  try {
+    const response = await fetch('/.netlify/functions/api', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pregunta }),
+    });
 
-      const data = await response.json();
-      return data.respuesta || "No pude responderte esta vez, Ronco.";
-    } catch (err) {
-      return "No tengo señal, Ronco. Probá de nuevo en un rato.";
-    }
+    const data = await response.json();
+    return data.respuesta || 'No pude responderte esta vez, Ronco.';
+  } catch (err) {
+    return 'No tengo señal, Ronco. Probá de nuevo en un rato.';
   }
+}
+
 
   function mostrarRespuesta(texto, reemplazar = false) {
     if (reemplazar && respuestaContainer.firstChild) {
