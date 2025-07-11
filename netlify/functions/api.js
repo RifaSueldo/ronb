@@ -16,15 +16,17 @@ exports.handler = async function(event, context) {
     }
 
     const response = await fetch(
-      'https://api-inference.huggingface.co/models/bigscience/bloomz-560m',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.HF_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ inputs: pregunta }),
-      }
+  'https://api-inference.huggingface.co/models/gpt2',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.HF_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ inputs: pregunta }),
+  }
+
+
     );
 
     const data = await response.json();
