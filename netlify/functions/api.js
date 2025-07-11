@@ -1,56 +1,68 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-exports.handler = async function(event, context) {
+export async function handler(event, context) {
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: 'Method Not Allowed' }),
+    };
+  }
+
+  const { pregunta } = JSON.parse(event.body);
+
+  if (!pregunta) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'Falta la pregunta' }),
+    };
+  }
+
+  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+  if (!OPENAI_API_KEY) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'No está configurada la API key' }),
+    };
+  }
+
   try {
-    if (event.httpMethod !== 'POST') {
-      return { statusCode: 405, body: 'Method Not Allowed' };
-    }
-
-    const { pregunta } = JSON.parse(event.body);
-
-    if (!pregunta) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ respuesta: 'No recibí tu pregunta, Ronco.' }),
-      };
-    }
-
-    console.log('Preguntaste:', pregunta);
-
-   const response = await fetch(
-  'https://api-inference.huggingface.co/models/google/flan-t5-small',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.HF_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ inputs: pregunta }),
-      }
-    );
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',  // o 'gpt-4o' si tenés acceso
+        messages: [
+          { role: 'system', content: 'Eres Ronco, un amigo del barrio que da consejos sinceros y con onda.' },
+          { role: 'user', content: pregunta },
+        ],
+        max_tokens: 150,
+        temperature: 0.7,
+      }),
+    });
 
     const data = await response.json();
 
-    if (!response.ok) {
+    if (data.error) {
       return {
         statusCode: 500,
-        body: JSON.stringify({ respuesta: 'Error interno: ' + JSON.stringify(data.error || data) }),
+        body: JSON.stringify({ error: data.error.message || 'Error desconocido' }),
       };
     }
 
-    const respuesta = Array.isArray(data) && data[0]?.generated_text
-      ? data[0].generated_text
-      : 'No entendí, Ronco.';
+    const respuesta = data.choices[0].message.content;
 
     return {
       statusCode: 200,
       body: JSON.stringify({ respuesta }),
     };
-
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ respuesta: 'Error interno: ' + error.message }),
+      body: JSON.stringify({ error: error.message || 'Error en la solicitud' }),
     };
   }
-};
+}
