@@ -1,50 +1,61 @@
-const fetch = require("node-fetch");
+const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS"
-  };
-
-  if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers,
-      body: ""
-    };
-  }
-
   try {
-    const body = JSON.parse(event.body || "{}");
-    const pregunta = body.pregunta || "Hola Ronco";
-    const prompt = `Respondé con empatía y sabiduría, estilo del Ronco, a esta situación:\n\n"${pregunta}"`;
+    if (event.httpMethod !== 'POST') {
+      return { statusCode: 405, body: 'Method Not Allowed' };
+    }
 
-    const respuestaIA = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer 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",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        inputs: prompt,
-        parameters: { max_new_tokens: 120 }
-      })
-    });
+    const { pregunta } = JSON.parse(event.body);
 
-    const data = await respuestaIA.json();
-    const salida = Array.isArray(data) ? data[0]?.generated_text || "No entendí, Ronco." : data?.generated_text || "No entendí, Ronco.";
+    if (!pregunta) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ respuesta: 'No recibí tu pregunta, Ronco.' }),
+      };
+    }
+
+    const response = await fetch(
+      'https://api-inference.huggingface.co/models/gpt2',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.HF_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ inputs: pregunta }),
+      }
+    );
+
+    if (!response.ok) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ respuesta: 'Ronco está medio caído, probá más tarde.' }),
+      };
+    }
+
+    const data = await response.json();
+
+    let respuesta = '';
+
+    if (Array.isArray(data) && data[0].generated_text) {
+      respuesta = data[0].generated_text;
+    } else if (data.generated_text) {
+      respuesta = data.generated_text;
+    } else {
+      respuesta = 'No entendí, Ronco.';
+    }
 
     return {
       statusCode: 200,
-      headers,
-      body: JSON.stringify({ respuesta: salida })
+      body: JSON.stringify({ respuesta }),
     };
+
   } catch (error) {
+    console.error(error);
     return {
       statusCode: 500,
-      headers,
-      body: JSON.stringify({ respuesta: "Me trabé, Ronco. Probá más tarde." })
+      body: JSON.stringify({ respuesta: 'Algo salió mal, Ronco.' }),
     };
   }
 };
