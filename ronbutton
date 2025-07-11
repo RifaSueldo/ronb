@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>RONBUTTON IA</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+    #ronbutton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #444;
+      border: none;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 10px #aaa;
+      z-index: 9999;
+    }
+
+    #dialogo {
+      position: fixed;
+      bottom: 110px;
+      right: 20px;
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      width: 320px;
+      max-height: 400px;
+      overflow-y: auto;
+      display: none;
+      box-shadow: 0 0 15px #000;
+      z-index: 9999;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #111;
+      border: 1px solid #555;
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    .respuesta {
+      background: #333;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<button id="ronbutton">👁️</button>
+
+<div id="dialogo">
+  <p><strong>Hablame:</strong></p>
+  <input type="text" id="inputPregunta" placeholder="¿Qué te pasa hoy?" />
+  <div id="respuestaContainer"></div>
+</div>
+
+<script>
+  const btn = document.getElementById('ronbutton');
+  const dialogo = document.getElementById('dialogo');
+  const input = document.getElementById('inputPregunta');
+  const respuestaContainer = document.getElementById('respuestaContainer');
+
+  btn.onclick = () => {
+    dialogo.style.display = dialogo.style.display === 'none' ? 'block' : 'none';
+    input.focus();
+  };
+
+  input.addEventListener('keypress', async function (e) {
+    if (e.key === 'Enter') {
+      const pregunta = input.value.trim();
+      if (pregunta !== '') {
+        mostrarRespuesta("Pensando...", true);
+        const respuesta = await pedirRespuesta(pregunta);
+        mostrarRespuesta(respuesta);
+        input.value = '';
+      }
+    }
+  });
+
+  async function pedirRespuesta(pregunta) {
+    try {
+      const response = await fetch("https://ronbutton-proxy-netlify.netlify.app/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ pregunta })
+      });
+
+      const data = await response.json();
+      return data.respuesta || "No pude responderte esta vez, Ronco.";
+    } catch (err) {
+      return "No tengo señal, Ronco. Probá de nuevo en un rato.";
+    }
+  }
+
+  function mostrarRespuesta(texto, reemplazar = false) {
+    if (reemplazar && respuestaContainer.firstChild) {
+      respuestaContainer.firstChild.textContent = texto;
+    } else {
+      const block = document.createElement('div');
+      block.className = 'respuesta';
+      block.textContent = texto;
+      respuestaContainer.prepend(block);
+    }
+  }
+</script>
+
+</body>
+</ht
