@@ -94,14 +94,14 @@
     /* Área mensajes (tipo chat) */
    #chatArea {
   display: flex;
-  flex-direction: column; /* ✅ Volvemos al orden natural */
+  flex-direction: column;
   overflow-y: auto;
-  padding: 15px 15px 10px;
+  padding: 15px 15px 90px; /* Aumentamos el bottom */
   background: #111b21;
   gap: 10px;
   scroll-behavior: smooth;
-  margin-bottom: 70px; /* Esto está bien para que no tape el input */
 }
+
 
 
 
@@ -336,11 +336,12 @@
   const chat = document.getElementById("chatArea");
   chat.appendChild(burbuja);
 
-  // Forzamos scroll al fondo luego de agregar
-  setTimeout(() => {
+  // Aseguramos scroll automático al fondo
+  requestAnimationFrame(() => {
     chat.scrollTop = chat.scrollHeight;
-  }, 50);
+  });
 }
+
 
 
 
