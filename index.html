@@ -5,21 +5,19 @@
   <title>Padre IANN | Confesionario Digital</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    /* Reset básico */
     * {
       box-sizing: border-box;
     }
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121b22; /* WhatsApp dark bg */
+      background-color: #121b22;
       color: #e1e1e1;
       height: 100vh;
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
     }
 
-    /* Banner privacidad (modal full screen) */
     #bannerPrivacidad {
       position: fixed;
       inset: 0;
@@ -66,46 +64,39 @@
       background: #1ebe57;
     }
 
-    /* Contenedor principal */
     #confesionario {
-  max-width: 600px;
-  margin: 0 auto;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative; /* para posicionar hijos si es necesario */
-  padding: 0;
-}
+      max-width: 600px;
+      margin: 0 auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column-reverse
+      position: relative;
+      padding: 0;
+    }
 
-    /* Header */
     #confesionario h1 {
-  flex: 0 0 60px;
-  line-height: 60px;
-  background: #075e54;
-  margin: 0;
-  padding: 0 20px;
-  font-weight: 700;
-  font-size: 1.4rem;
-  color: white;
-  text-align: center;
-  user-select: none;
-  box-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
-}
-    /* Área mensajes (tipo chat) */
-   #chatArea {
+      flex: 0 0 60px;
+      line-height: 60px;
+      background: #075e54;
+      margin: 0;
+      padding: 0 20px;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: white;
+      text-align: center;
+      user-select: none;
+      box-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
+    }
+
+    #chatArea {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   overflow-y: auto;
-  padding: 15px 15px 90px; /* Aumentamos el bottom */
+  padding: 15px 15px 100px; /* espacio para que el input no tape */
   background: #111b21;
   gap: 10px;
   scroll-behavior: smooth;
 }
-
-
-
-
-    /* Burbuja mensaje */
     .mensaje {
       max-width: 70%;
       padding: 10px 15px;
@@ -118,10 +109,9 @@
       animation: fadeInUp 0.3s ease forwards;
     }
 
-    /* Mensaje del usuario */
     .mensaje.usuario {
       align-self: flex-end;
-      background-color: #dcf8c6; /* verde claro WhatsApp */
+      background-color: #dcf8c6;
       color: #111;
       border-bottom-right-radius: 5px;
       border-bottom-left-radius: 20px;
@@ -129,7 +119,6 @@
       border-top-right-radius: 20px;
     }
 
-    /* Mensaje Padre IANN */
     .mensaje.padre {
       align-self: flex-start;
       background-color: #2a3942;
@@ -140,53 +129,43 @@
       border-top-left-radius: 20px;
     }
 
-    /* Animación burbuja */
     @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* Área input + botones */
     #inputArea {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 600px;
-  background: #202c33;
-  padding: 10px 15px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  box-shadow: 0 -1px 5px rgb(0 0 0 / 0.3);
-  z-index: 20;
-}
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 600px;
+      background: #202c33;
+      padding: 10px 15px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      box-shadow: 0 -1px 5px rgb(0 0 0 / 0.3);
+      z-index: 20;
+    }
 
-
-    /* Textarea estilo WhatsApp */
     textarea#confesion {
-  flex: 1;
-  min-height: 40px;
-  max-height: 120px;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 20px;
-  border: none;
-  resize: none;
-  background: #323c42;
-  color: white;
-  font-family: inherit;
-  outline: none;
-  box-shadow: inset 0 1px 1px rgb(0 0 0 / 0.2);
-  transition: background 0.3s;
-}
+      flex: 1;
+      min-height: 40px;
+      max-height: 120px;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 20px;
+      border: none;
+      resize: none;
+      background: #323c42;
+      color: white;
+      font-family: inherit;
+      outline: none;
+      box-shadow: inset 0 1px 1px rgb(0 0 0 / 0.2);
+      transition: background 0.3s;
+    }
     textarea#confesion::placeholder {
       color: #bbb;
     }
@@ -194,7 +173,6 @@
       background: #4a5a63;
     }
 
-    /* Botones enviar / dictar */
     button.enviar {
       background: #25d366;
       border: none;
@@ -211,18 +189,14 @@
       user-select: none;
       box-shadow: 0 2px 5px rgb(0 0 0 / 0.3);
     }
-    button.enviar:hover {
-      background: #1ebe57;
-    }
-    button.enviar:active {
-      background: #189e43;
-    }
+
+    button.enviar:hover { background: #1ebe57; }
+    button.enviar:active { background: #189e43; }
     button.enviar[disabled] {
       background: #9de4b3;
       cursor: not-allowed;
     }
 
-    /* Botones donar y compartir */
     #btnDonar, #btnCompartir {
       position: fixed;
       bottom: 80px;
@@ -242,17 +216,15 @@
       user-select: none;
       transition: background 0.3s;
     }
+
     #btnDonar:hover, #btnCompartir:hover {
       background: #25d366;
       color: #111;
       box-shadow: 0 0 15px #25d366;
     }
-    #btnDonar {
-      left: 20px;
-    }
-    #btnCompartir {
-      right: 20px;
-    }
+
+    #btnDonar { left: 20px; }
+    #btnCompartir { right: 20px; }
 
     #popupDonar {
       position: fixed;
@@ -281,28 +253,25 @@
       font-weight: 600;
       transition: background 0.3s;
     }
+
     #popupDonar a:hover {
       background: #1ebe57;
     }
-
   </style>
 </head>
 <body>
 
-<!-- Banner de privacidad -->
 <div id="bannerPrivacidad">
   <div id="popup">
     <h2>Confesionario Digital</h2>
-    <p>“Este espacio no reemplaza tu fe. Sólo es una voz para acompañarte cuando el silencio pesa.” Esta confesión es completamente privada. No se almacenan datos personales ni grabaciones. Todo lo que digas será procesado en el momento y luego descartado.</p>
+    <p>“Este espacio no reemplaza tu fe. Sólo es una voz para acompañarte cuando el silencio pesa.”</p>
     <button onclick="cerrarPrivacidad()">Entiendo y acepto</button>
   </div>
 </div>
 
-<!-- Confesionario -->
 <div id="confesionario" style="display:none;">
   <h1>Padre IANN</h1>
   <div id="chatArea">
-    <!-- Mensajes aparecerán aquí -->
     <div id="respuesta" style="display:none;"></div>
   </div>
 
@@ -313,20 +282,14 @@
   </div>
 </div>
 
-  
-
-
-<!-- Botón donar -->
 <button id="btnDonar" title="Ayudá a sostener este espacio">💚</button>
 <div id="popupDonar">
-  <p>Si esta confesión te ayudó, podés hacer una donación voluntaria. Gracias por sostener este espacio 🙏</p>
+  <p>Si esta confesión te ayudó, podés hacer una donación voluntaria 🙏</p>
   <a href="https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=TU_PREF_ID" target="_blank">Hacer una donación</a>
 </div>
 
-<!-- Botón compartir -->
 <button id="btnCompartir" title="Compartí con alguien que lo necesite">📤</button>
 
-<!-- Scripts -->
 <script>
  function agregarMensaje(texto, tipo = "padre") {
   const burbuja = document.createElement("div");
@@ -336,102 +299,83 @@
   const chat = document.getElementById("chatArea");
   chat.appendChild(burbuja);
 
-  // Aseguramos scroll automático al fondo
+  // Esperamos que se renderice y forzamos scroll al fondo
   requestAnimationFrame(() => {
     chat.scrollTop = chat.scrollHeight;
   });
 }
 
 
-
-
   function cerrarPrivacidad() {
     document.getElementById('bannerPrivacidad').style.display = 'none';
     document.getElementById('confesionario').style.display = 'block';
   }
-// Auto expand textarea para que se comporte como WhatsApp
+
   function autoExpand(field) {
     field.style.height = 'auto';
     field.style.height = (field.scrollHeight) + 'px';
   }
-async function enviarConfesion() {
-  const texto = document.getElementById('confesion').value.trim();
-  const respuestaDiv = document.getElementById('respuesta');
 
-  if (!texto) {
-    agregarMensaje("Por favor, escribí algo.", "padre");
-    return;
-  }
+  async function enviarConfesion() {
+    const texto = document.getElementById('confesion').value.trim();
+    const respuestaDiv = document.getElementById('respuesta');
+    if (!texto) return agregarMensaje("Por favor, escribí algo.", "padre");
 
-  agregarMensaje(texto, "usuario");
-  document.getElementById('confesion').value = "";
-  agregarMensaje("Padre IANN está reflexionando...", "padre");
+    agregarMensaje(texto, "usuario");
+    document.getElementById('confesion').value = "";
+    agregarMensaje("Padre IANN está reflexionando...", "padre");
 
-  try {
-    const response = await fetch("/.netlify/functions/api", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pregunta: texto })
-    });
-
-    const data = await response.json();
-
-    // Borrar el mensaje anterior "Padre IANN está reflexionando..."
-    const chat = document.getElementById("chatArea");
-    const ultimo = chat.lastElementChild;
-    if (ultimo && ultimo.textContent === "Padre IANN está reflexionando...") {
-      chat.removeChild(ultimo);
+    try {
+      const response = await fetch("/.netlify/functions/api", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pregunta: texto })
+      });
+      const data = await response.json();
+      const chat = document.getElementById("chatArea");
+      const ultimo = chat.lastElementChild;
+      if (ultimo && ultimo.textContent === "Padre IANN está reflexionando...") {
+        chat.removeChild(ultimo);
+      }
+      respuestaDiv.textContent = data.respuesta || "No pude responderte esta vez.";
+      agregarMensaje(respuestaDiv.textContent, "padre");
+    } catch {
+      agregarMensaje("Hubo un error interno. Probá más tarde.", "padre");
     }
-
-    respuestaDiv.textContent = data.respuesta || "No pude responderte esta vez."; // Por compatibilidad
-    agregarMensaje(respuestaDiv.textContent, "padre");
-  } catch (error) {
-    agregarMensaje("Hubo un error interno. Probá más tarde.", "padre");
   }
-}
 
   function iniciarEscucha() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert("Tu navegador no soporta reconocimiento de voz.");
       return;
     }
-
     const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     reconocimiento.lang = 'es-AR';
     reconocimiento.interimResults = false;
     reconocimiento.maxAlternatives = 1;
-
-    reconocimiento.onresult = function(event) {
-      const textoDetectado = event.results[0][0].transcript;
-      document.getElementById("confesion").value = textoDetectado;
+    reconocimiento.onresult = (event) => {
+      document.getElementById("confesion").value = event.results[0][0].transcript;
     };
-
-    reconocimiento.onerror = function(event) {
-      alert("No se pudo usar el micrófono. Probá de nuevo.");
+    reconocimiento.onerror = () => {
+      alert("No se pudo usar el micrófono.");
     };
-
     reconocimiento.start();
   }
 
-  // Botón Donar
   const btnDonar = document.getElementById("btnDonar");
   const popupDonar = document.getElementById("popupDonar");
-
   btnDonar.onclick = () => {
     popupDonar.style.display = popupDonar.style.display === 'none' ? 'block' : 'none';
   };
 
-  // Botón Compartir
   const btnCompartir = document.getElementById("btnCompartir");
-
   btnCompartir.onclick = async () => {
     const url = window.location.href;
     const texto = "Probá el confesionario digital del Padre IANN. Te puede hacer bien. 🙏";
-
     if (navigator.share) {
       try {
         await navigator.share({ title: "Padre IANN", text: texto, url });
-      } catch (err) {
+      } catch {
         alert("No se pudo compartir.");
       }
     } else {
