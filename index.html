@@ -74,19 +74,22 @@
       padding: 0;
     }
 
-    #confesionario h1 {
-      flex: 0 0 60px;
-      line-height: 60px;
-      background: #075e54;
-      margin: 0;
-      padding: 0 20px;
-      font-weight: 700;
-      font-size: 1.4rem;
-      color: white;
-      text-align: center;
-      user-select: none;
-      box-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
-    }
+   #confesionario .logo {
+  width: 100%;
+  height: 60px;
+  background: #075e54;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
+}
+
+#confesionario .logo img {
+  height: 40px;
+  max-width: 90%;
+  object-fit: contain;
+  user-select: none;
+}
 
     #chatArea {
   display: flex;
@@ -271,7 +274,9 @@
 </div>
 
 <div id="confesionario" style="display:none;">
-  <h1>Padre IANN</h1>
+  <div class="logo">
+  <img src="https://i.ibb.co/tM91jjxj/logo-capilla-digital.png" alt="Logo de Padre IANN" />
+</div>
   <div id="chatArea">
     <div id="respuesta" style="display:none;"></div>
   </div>
