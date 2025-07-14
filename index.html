@@ -119,4 +119,54 @@
 
 <div id="opciones">
   <h1>¿Cómo va a ser tu confesión?</h1>
-  <button class="boton-opcion" onclick="elegirTexto()">✍️
+  <button class="boton-opcion" onclick="elegirTexto()">✍️ Escribir</button>
+  <button class="boton-opcion" disabled>🎙️ Audio (próximamente)</button>
+</div>
+
+<div id="confesionario">
+  <h1>Bienvenido</h1>
+  <p>Estás en un espacio confidencial. Escribí lo que quieras compartir.</p>
+  <textarea id="confesion" placeholder="Contame qué te pasa..."></textarea>
+  <button class="enviar" onclick="enviarConfesion()">Enviar confesión</button>
+  <div id="respuesta"></div>
+</div>
+
+<script>
+  function cerrarPrivacidad() {
+    document.getElementById('bannerPrivacidad').style.display = 'none';
+    document.getElementById('opciones').style.display = 'block';
+  }
+
+  function elegirTexto() {
+    document.getElementById('opciones').style.display = 'none';
+    document.getElementById('confesionario').style.display = 'block';
+  }
+
+  async function enviarConfesion() {
+    const texto = document.getElementById('confesion').value.trim();
+    const respuestaDiv = document.getElementById('respuesta');
+
+    if (!texto) {
+      respuestaDiv.textContent = "Por favor, escribí algo.";
+      return;
+    }
+
+    respuestaDiv.textContent = "Padre IANN está reflexionando...";
+
+    try {
+      const response = await fetch("/.netlify/functions/api", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pregunta: texto })
+      });
+
+      const data = await response.json();
+      respuestaDiv.textContent = data.respuesta || "No pude responderte esta vez.";
+    } catch (error) {
+      respuestaDiv.textContent = "Hubo un error interno. Probá más tarde.";
+    }
+  }
+</script>
+
+</body>
+</html>
