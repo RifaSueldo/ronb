@@ -295,7 +295,7 @@
   <h1>Padre IANN</h1>
   <div id="chatArea">
     <!-- Mensajes aparecerán aquí -->
-    <div id="respuesta"></div>
+    <div id="respuesta" style="display:none;"></div>
   </div>
 
   <div id="inputArea">
@@ -320,35 +320,55 @@
 
 <!-- Scripts -->
 <script>
+  function agregarMensaje(texto, tipo = "padre") {
+  const burbuja = document.createElement("div");
+  burbuja.className = `mensaje ${tipo}`;
+  burbuja.textContent = texto;
+
+  const chat = document.getElementById("chatArea");
+  chat.appendChild(burbuja);
+  chat.scrollTop = chat.scrollHeight;
+}
   function cerrarPrivacidad() {
     document.getElementById('bannerPrivacidad').style.display = 'none';
     document.getElementById('confesionario').style.display = 'block';
   }
 
-  async function enviarConfesion() {
-    const texto = document.getElementById('confesion').value.trim();
-    const respuestaDiv = document.getElementById('respuesta');
+async function enviarConfesion() {
+  const texto = document.getElementById('confesion').value.trim();
+  const respuestaDiv = document.getElementById('respuesta');
 
-    if (!texto) {
-      respuestaDiv.textContent = "Por favor, escribí algo.";
-      return;
-    }
-
-    respuestaDiv.textContent = "Padre IANN está reflexionando...";
-
-    try {
-      const response = await fetch("/.netlify/functions/api", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pregunta: texto })
-      });
-
-      const data = await response.json();
-      respuestaDiv.textContent = data.respuesta || "No pude responderte esta vez.";
-    } catch (error) {
-      respuestaDiv.textContent = "Hubo un error interno. Probá más tarde.";
-    }
+  if (!texto) {
+    agregarMensaje("Por favor, escribí algo.", "padre");
+    return;
   }
+
+  agregarMensaje(texto, "usuario");
+  document.getElementById('confesion').value = "";
+  agregarMensaje("Padre IANN está reflexionando...", "padre");
+
+  try {
+    const response = await fetch("/.netlify/functions/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pregunta: texto })
+    });
+
+    const data = await response.json();
+
+    // Borrar el mensaje anterior "Padre IANN está reflexionando..."
+    const chat = document.getElementById("chatArea");
+    const ultimo = chat.lastElementChild;
+    if (ultimo && ultimo.textContent === "Padre IANN está reflexionando...") {
+      chat.removeChild(ultimo);
+    }
+
+    respuestaDiv.textContent = data.respuesta || "No pude responderte esta vez."; // Por compatibilidad
+    agregarMensaje(respuestaDiv.textContent, "padre");
+  } catch (error) {
+    agregarMensaje("Hubo un error interno. Probá más tarde.", "padre");
+  }
+}
 
   function iniciarEscucha() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
