@@ -2,124 +2,121 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>RONBUTTON IA</title>
+  <title>Padre IANN | Confesionario Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
+      font-family: "Segoe UI", sans-serif;
       background: #111;
       color: #fff;
     }
-    #ronbutton {
+
+    #bannerPrivacidad {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #444;
-      border: none;
-      border-radius: 50%;
-      width: 70px;
-      height: 70px;
-      font-size: 24px;
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 10px #aaa;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 9999;
     }
-    #dialogo {
-      position: fixed;
-      bottom: 110px;
-      right: 20px;
+
+    #popup {
       background: #222;
-      padding: 15px;
+      padding: 30px;
       border-radius: 10px;
-      width: 320px;
-      max-height: 400px;
-      overflow-y: auto;
-      display: none;
+      max-width: 90%;
+      text-align: center;
       box-shadow: 0 0 15px #000;
-      z-index: 9999;
     }
-    input[type="text"] {
+
+    #popup h2 {
+      margin-top: 0;
+    }
+
+    #popup p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    #popup button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #0f0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #opciones, #confesionario {
+      display: none;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .boton-opcion {
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      background: #111;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 15px;
+      height: 120px;
+      font-size: 16px;
+      background: #222;
       border: 1px solid #555;
       color: #fff;
-      border-radius: 5px;
+      border-radius: 8px;
+      resize: none;
+      margin-top: 15px;
     }
-    .respuesta {
-      background: #333;
-      padding: 10px;
-      border-radius: 5px;
+
+    button.enviar {
+      width: 100%;
+      padding: 15px;
       margin-top: 10px;
-      font-size: 14px;
+      font-size: 16px;
+      background: #0a0;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #respuesta {
+      background: #333;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
       white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
 
-<button id="ronbutton">👁️</button>
-
-<div id="dialogo">
-  <p><strong>Hablame:</strong></p>
-  <input type="text" id="inputPregunta" placeholder="¿Qué te pasa hoy?" />
-  <div id="respuestaContainer"></div>
+<div id="bannerPrivacidad">
+  <div id="popup">
+    <h2>Confesionario Digital</h2>
+    <p>Esta confesión es completamente privada. No se almacenan datos personales ni grabaciones. Todo lo que digas será procesado en el momento y luego descartado.</p>
+    <button onclick="cerrarPrivacidad()">Entiendo y acepto</button>
+  </div>
 </div>
 
-<script>
-  const btn = document.getElementById('ronbutton');
-  const dialogo = document.getElementById('dialogo');
-  const input = document.getElementById('inputPregunta');
-  const respuestaContainer = document.getElementById('respuestaContainer');
-
-  btn.onclick = () => {
-    dialogo.style.display = dialogo.style.display === 'none' ? 'block' : 'none';
-    input.focus();
-  };
-
-  input.addEventListener('keypress', async function (e) {
-    if (e.key === 'Enter') {
-      const pregunta = input.value.trim();
-      if (pregunta !== '') {
-        mostrarRespuesta("Pensando...", true);
-        const respuesta = await pedirRespuesta(pregunta);
-        mostrarRespuesta(respuesta);
-        input.value = '';
-      }
-    }
-  });
-
-  async function pedirRespuesta(pregunta) {
-    try {
-      const response = await fetch("/.netlify/functions/api", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ pregunta })
-      });
-
-      const data = await response.json();
-
-      return data.respuesta || "No pude responderte esta vez, Ronco.";
-    } catch (err) {
-      return "No tengo señal, Ronco. Probá de nuevo en un rato.";
-    }
-  }
-
-  function mostrarRespuesta(texto, reemplazar = false) {
-    if (reemplazar && respuestaContainer.firstChild) {
-      respuestaContainer.firstChild.textContent = texto;
-    } else {
-      const block = document.createElement('div');
-      block.className = 'respuesta';
-      block.textContent = texto;
-      respuestaContainer.prepend(block);
-    }
-  }
-</script>
-
-</body>
-</html>
+<div id="opciones">
+  <h1>¿Cómo va a ser tu confesión?</h1>
+  <button class="boton-opcion" onclick="elegirTexto()">✍️
