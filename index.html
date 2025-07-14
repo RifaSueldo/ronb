@@ -8,12 +8,15 @@
     * {
       box-sizing: border-box;
     }
-    body {
+    
+     html, body {
       margin: 0;
+      padding: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121b22;
-      color: #e1e1e1;
+      background-color: #311840;
+      color: #fff;
       height: 100vh;
+      width: 100%;
       display: flex;
       flex-direction: column;
     }
@@ -272,11 +275,11 @@
     <button onclick="cerrarPrivacidad()">Entiendo y acepto</button>
   </div>
 </div>
-<div class="logo">
-  <img src="https://i.ibb.co/tM91jjxj/logo-capilla-digital.png" alt="Logo de Padre IANN" />
-</div>
+
 <div id="confesionario" style="display:none;">
-  
+  <div class="logo">
+  <img src="https://i.ibb.co/tM91jjxj/logo-capilla-digital.png" alt="Logo de Padre IANN" /></div>
+
   <div id="chatArea">
     <div id="respuesta" style="display:none;"></div>
   </div>
