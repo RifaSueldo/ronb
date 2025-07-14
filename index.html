@@ -49,7 +49,7 @@
       cursor: pointer;
     }
 
-    #opciones, #confesionario {
+    #confesionario {
       display: none;
       padding: 20px;
       max-width: 500px;
@@ -59,18 +59,6 @@
     h1 {
       text-align: center;
       margin-top: 30px;
-    }
-
-    .boton-opcion {
-      width: 100%;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 16px;
-      background: #444;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
     }
 
     textarea {
@@ -105,56 +93,58 @@
       margin-top: 20px;
       white-space: pre-wrap;
     }
+
     #btnDonar, #btnCompartir {
-    position: fixed;
-    bottom: 20px;
-    width: 50px;
-    height: 50px;
-    font-size: 22px;
-    border: none;
-    border-radius: 50%;
-    background: #333;
-    color: #0f0;
-    box-shadow: 0 0 8px #0f0;
-    cursor: pointer;
-    z-index: 9999;
-  }
+      position: fixed;
+      bottom: 20px;
+      width: 50px;
+      height: 50px;
+      font-size: 22px;
+      border: none;
+      border-radius: 50%;
+      background: #333;
+      color: #0f0;
+      box-shadow: 0 0 8px #0f0;
+      cursor: pointer;
+      z-index: 9999;
+    }
 
-  #btnDonar {
-    left: 20px;
-  }
+    #btnDonar {
+      left: 20px;
+    }
 
-  #btnCompartir {
-    right: 20px;
-  }
+    #btnCompartir {
+      right: 20px;
+    }
 
-  #popupDonar {
-    position: fixed;
-    bottom: 80px;
-    left: 20px;
-    width: 280px;
-    background: #222;
-    color: #fff;
-    padding: 15px;
-    border-radius: 10px;
-    display: none;
-    z-index: 9999;
-    box-shadow: 0 0 15px #000;
-  }
+    #popupDonar {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      width: 280px;
+      background: #222;
+      color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+      z-index: 9999;
+      box-shadow: 0 0 15px #000;
+    }
 
-  #popupDonar a {
-    display: inline-block;
-    margin-top: 10px;
-    background: #0a0;
-    padding: 10px 15px;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-  }
+    #popupDonar a {
+      display: inline-block;
+      margin-top: 10px;
+      background: #0a0;
+      padding: 10px 15px;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
 
+<!-- Banner de privacidad -->
 <div id="bannerPrivacidad">
   <div id="popup">
     <h2>Confesionario Digital</h2>
@@ -163,39 +153,31 @@
   </div>
 </div>
 
-<div id="opciones">
-  <h1>¿Cómo va a ser tu confesión?</h1>
-  <button class="boton-opcion" onclick="elegirTexto()">✍️ Escribir</button>
-  
-</div>
-
+<!-- Confesionario -->
 <div id="confesionario">
   <h1>Bienvenido</h1>
   <p>Estás en un espacio confidencial. Escribí lo que quieras compartir.</p>
   <textarea id="confesion" placeholder="Contame qué te pasa..."></textarea>
   <button class="enviar" onclick="iniciarEscucha()">🎙️ Dictar confesión</button>
   <button class="enviar" onclick="enviarConfesion()">🙏 Enviar confesión</button>
-  
+
   <div id="respuesta"></div>
 </div>
-<!-- BOTÓN DONAR -->
+
+<!-- Botón donar -->
 <button id="btnDonar" title="Ayudá a sostener este espacio">💚</button>
 <div id="popupDonar">
   <p>Si esta confesión te ayudó, podés hacer una donación voluntaria. Gracias por sostener este espacio 🙏</p>
   <a href="https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=TU_PREF_ID" target="_blank">Hacer una donación</a>
 </div>
 
-<!-- BOTÓN COMPARTIR -->
+<!-- Botón compartir -->
 <button id="btnCompartir" title="Compartí con alguien que lo necesite">📤</button>
 
+<!-- Scripts -->
 <script>
   function cerrarPrivacidad() {
     document.getElementById('bannerPrivacidad').style.display = 'none';
-    document.getElementById('opciones').style.display = 'block';
-  }
-
-  function elegirTexto() {
-    document.getElementById('opciones').style.display = 'none';
     document.getElementById('confesionario').style.display = 'block';
   }
 
@@ -223,8 +205,7 @@
       respuestaDiv.textContent = "Hubo un error interno. Probá más tarde.";
     }
   }
-</script>
-<script>
+
   function iniciarEscucha() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert("Tu navegador no soporta reconocimiento de voz.");
@@ -247,8 +228,8 @@
 
     reconocimiento.start();
   }
-</script>
-<script>
+
+  // Botón Donar
   const btnDonar = document.getElementById("btnDonar");
   const popupDonar = document.getElementById("popupDonar");
 
@@ -256,7 +237,7 @@
     popupDonar.style.display = popupDonar.style.display === 'none' ? 'block' : 'none';
   };
 
-  // COMPARTIR
+  // Botón Compartir
   const btnCompartir = document.getElementById("btnCompartir");
 
   btnCompartir.onclick = async () => {
@@ -275,5 +256,6 @@
     }
   };
 </script>
+
 </body>
 </html>
