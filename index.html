@@ -333,7 +333,11 @@
     document.getElementById('bannerPrivacidad').style.display = 'none';
     document.getElementById('confesionario').style.display = 'block';
   }
-
+// Auto expand textarea para que se comporte como WhatsApp
+  function autoExpand(field) {
+    field.style.height = 'auto';
+    field.style.height = (field.scrollHeight) + 'px';
+  }
 async function enviarConfesion() {
   const texto = document.getElementById('confesion').value.trim();
   const respuestaDiv = document.getElementById('respuesta');
