@@ -120,7 +120,7 @@
 <div id="opciones">
   <h1>¿Cómo va a ser tu confesión?</h1>
   <button class="boton-opcion" onclick="elegirTexto()">✍️ Escribir</button>
-  <button class="boton-opcion" disabled>🎙️ Audio (próximamente)</button>
+  <button class="boton-opcion" disabled>🎙️ Audio</button>
 </div>
 
 <div id="confesionario">
@@ -166,6 +166,30 @@
     } catch (error) {
       respuestaDiv.textContent = "Hubo un error interno. Probá más tarde.";
     }
+  }
+</script>
+<script>
+  function iniciarEscucha() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert("Tu navegador no soporta reconocimiento de voz.");
+      return;
+    }
+
+    const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    reconocimiento.lang = 'es-AR';
+    reconocimiento.interimResults = false;
+    reconocimiento.maxAlternatives = 1;
+
+    reconocimiento.onresult = function(event) {
+      const textoDetectado = event.results[0][0].transcript;
+      document.getElementById("confesion").value = textoDetectado;
+    };
+
+    reconocimiento.onerror = function(event) {
+      alert("No se pudo usar el micrófono. Probá de nuevo.");
+    };
+
+    reconocimiento.start();
   }
 </script>
 
