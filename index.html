@@ -105,6 +105,52 @@
       margin-top: 20px;
       white-space: pre-wrap;
     }
+    #btnDonar, #btnCompartir {
+    position: fixed;
+    bottom: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    border: none;
+    border-radius: 50%;
+    background: #333;
+    color: #0f0;
+    box-shadow: 0 0 8px #0f0;
+    cursor: pointer;
+    z-index: 9999;
+  }
+
+  #btnDonar {
+    left: 20px;
+  }
+
+  #btnCompartir {
+    right: 20px;
+  }
+
+  #popupDonar {
+    position: fixed;
+    bottom: 80px;
+    left: 20px;
+    width: 280px;
+    background: #222;
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    display: none;
+    z-index: 9999;
+    box-shadow: 0 0 15px #000;
+  }
+
+  #popupDonar a {
+    display: inline-block;
+    margin-top: 10px;
+    background: #0a0;
+    padding: 10px 15px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+  }
   </style>
 </head>
 <body>
@@ -132,6 +178,15 @@
   
   <div id="respuesta"></div>
 </div>
+<!-- BOTÓN DONAR -->
+<button id="btnDonar" title="Ayudá a sostener este espacio">💚</button>
+<div id="popupDonar">
+  <p>Si esta confesión te ayudó, podés hacer una donación voluntaria. Gracias por sostener este espacio 🙏</p>
+  <a href="https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=TU_PREF_ID" target="_blank">Hacer una donación</a>
+</div>
+
+<!-- BOTÓN COMPARTIR -->
+<button id="btnCompartir" title="Compartí con alguien que lo necesite">📤</button>
 
 <script>
   function cerrarPrivacidad() {
@@ -193,6 +248,32 @@
     reconocimiento.start();
   }
 </script>
+<script>
+  const btnDonar = document.getElementById("btnDonar");
+  const popupDonar = document.getElementById("popupDonar");
 
+  btnDonar.onclick = () => {
+    popupDonar.style.display = popupDonar.style.display === 'none' ? 'block' : 'none';
+  };
+
+  // COMPARTIR
+  const btnCompartir = document.getElementById("btnCompartir");
+
+  btnCompartir.onclick = async () => {
+    const url = window.location.href;
+    const texto = "Probá el confesionario digital del Padre IANN. Te puede hacer bien. 🙏";
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Padre IANN", text: texto, url });
+      } catch (err) {
+        alert("No se pudo compartir.");
+      }
+    } else {
+      navigator.clipboard.writeText(url);
+      alert("Enlace copiado para compartir 🙌");
+    }
+  };
+</script>
 </body>
 </html>
