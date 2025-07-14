@@ -1,68 +1,60 @@
-import fetch from 'node-fetch';
+const fetch = require("node-fetch");
 
-export async function handler(event, context) {
-  if (event.httpMethod !== 'POST') {
+exports.handler = async function (event) {
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: 'Method Not Allowed' }),
+      body: JSON.stringify({ respuesta: "Método no permitido" })
     };
   }
 
-  const { pregunta } = JSON.parse(event.body);
+  const { pregunta } = JSON.parse(event.body || "{}");
 
   if (!pregunta) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: 'Falta la pregunta' }),
+      body: JSON.stringify({ respuesta: "No llegó ninguna confesión." })
     };
   }
 
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-  if (!OPENAI_API_KEY) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'No está configurada la API key' }),
-    };
-  }
+  const apiKey = process.env.OPENAI_API_KEY;
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    const respuestaIA = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',  // o 'gpt-4o' si tenés acceso
+        model: "gpt-3.5-turbo",
         messages: [
-          { role: 'system', content: 'Eres Ronco, un amigo del barrio que da consejos sinceros y con onda.' },
-          { role: 'user', content: pregunta },
+          {
+            role: "system",
+            content: "Sos Padre IANN. Respondé como si fueras un confesor digital. Tu tono es serio, empático y humano. No juzgás, no aconsejás directamente: escuchás, comprendés y hacés reflexionar. Respondé en español."
+          },
+          {
+            role: "user",
+            content: pregunta
+          }
         ],
-        max_tokens: 150,
-        temperature: 0.7,
-      }),
+        temperature: 0.7
+      })
     });
 
-    const data = await response.json();
+    const data = await respuestaIA.json();
 
-    if (data.error) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: data.error.message || 'Error desconocido' }),
-      };
-    }
-
-    const respuesta = data.choices[0].message.content;
+    const texto = data.choices?.[0]?.message?.content?.trim();
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ respuesta }),
+      body: JSON.stringify({ respuesta: texto || "No pude responderte esta vez." })
     };
+
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message || 'Error en la solicitud' }),
+      body: JSON.stringify({ respuesta: "Error interno: no pude contactar con Padre IANN." })
     };
   }
-}
+};
