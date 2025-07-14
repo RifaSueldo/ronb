@@ -15,7 +15,7 @@
       color: #e1e1e1;
       height: 100vh;
       display: flex;
-      flex-direction: column-reverse;
+      flex-direction: column;
     }
 
     #bannerPrivacidad {
@@ -69,7 +69,7 @@
       margin: 0 auto;
       height: 100vh;
       display: flex;
-      flex-direction: column-reverse
+      flex-direction: column;
       position: relative;
       padding: 0;
     }
@@ -90,12 +90,10 @@
 
     #chatArea {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   overflow-y: auto;
-  padding: 15px 15px 100px; /* espacio para que el input no tape */
-  background: #111b21;
-  gap: 10px;
-  scroll-behavior: smooth;
+  height: 100%;  /* o flex: 1 si usás flexbox */
+  scroll-behavior: smooth; /* también para el scroll nativo */
 }
     .mensaje {
       max-width: 70%;
@@ -299,10 +297,13 @@
   const chat = document.getElementById("chatArea");
   chat.appendChild(burbuja);
 
-  // Esperamos que se renderice y forzamos scroll al fondo
-  requestAnimationFrame(() => {
-    chat.scrollTop = chat.scrollHeight;
-  });
+  // Scroll automático y suave al final, usando scrollTo con behavior
+  setTimeout(() => {
+    chat.scrollTo({
+      top: chat.scrollHeight,
+      behavior: 'smooth'
+    });
+  }, 50);
 }
 
 
