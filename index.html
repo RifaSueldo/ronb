@@ -30,20 +30,36 @@
       justify-content: center;
       z-index: 9999;
     }
-
+#bannerPrivacidad::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('https://i.ibb.co/sv1Gzy9/vitral-transparente.png'); /* Imagen tipo vitral con transparencia */
+  background-size: cover;
+  opacity: 0.05;
+  z-index: 1;
+  pointer-events: none;
+}
     #popup {
-      background: #1e2a35;
+      
       padding: 30px;
       border-radius: 10px;
       max-width: 90%;
       text-align: center;
       box-shadow: 0 0 20px #0f0;
       color: #d1d1d1;
+      animation: entradaLuminosa 1.6s ease-out both;
+  background: radial-gradient(circle at top, #1e2a35, #121b22);
+  position: relative;
+      z-index: 2;
     }
 
     #popup h2 {
       margin-top: 0;
       color: #25d366;
+      animation: resplandorEclesiastico 3s ease-in-out infinite;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
     }
 
     #popup p {
@@ -66,7 +82,27 @@
     #popup button:hover {
       background: #1ebe57;
     }
+@keyframes entradaLuminosa {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+    box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+  }
+}
 
+@keyframes resplandorEclesiastico {
+  0%, 100% {
+    text-shadow: 0 0 8px #25d366, 0 0 16px #25d366;
+  }
+  50% {
+    text-shadow: 0 0 16px #00ff88, 0 0 32px #00ff88;
+  }
+}
     #confesionario {
       max-width: 100%;
       margin: 0;
