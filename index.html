@@ -87,54 +87,11 @@
     }
 
     #respuesta {
+      background: #333;
+      padding: 15px;
+      border-radius: 8px;
       margin-top: 20px;
-    }
-
-    .chat {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: #181717;
-      padding: 20px;
-      border-radius: 10px;
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .mensaje {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      max-width: 80%;
-    }
-
-    .mensaje.iann {
-      flex-direction: row;
-    }
-
-    .mensaje.usuario {
-      flex-direction: row-reverse;
-      align-self: flex-end;
-    }
-
-    .avatar {
-      background: #f9b233;
-      color: #1e1c1c;
-      font-weight: bold;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 32px;
-      font-size: 16px;
-    }
-
-    .texto {
-      background: #2e2e2e;
-      color: #fff;
-      padding: 10px 15px;
-      border-radius: 10px;
-      font-size: 15px;
+      white-space: pre-wrap;
     }
 
     #btnDonar, #btnCompartir {
@@ -187,59 +144,53 @@
 </head>
 <body>
 
+<!-- Banner de privacidad -->
 <div id="bannerPrivacidad">
   <div id="popup">
     <h2>Confesionario Digital</h2>
-    <p>“Este espacio no reemplaza tu fe. Sólo es una voz para acompañarte cuando el silencio pesa.” Esta confesión es completamente privada. No se almacenan datos personales ni grabaciones.</p>
+    <p>“Este espacio no reemplaza tu fe. Sólo es una voz para acompañarte cuando el silencio pesa.” Esta confesión es completamente privada. No se almacenan datos personales ni grabaciones. Todo lo que digas será procesado en el momento y luego descartado.</p>
     <button onclick="cerrarPrivacidad()">Entiendo y acepto</button>
   </div>
 </div>
 
+<!-- Confesionario -->
 <div id="confesionario">
   <h1>Bienvenido</h1>
   <p>Estás en un espacio confidencial. Escribí lo que quieras compartir.</p>
   <textarea id="confesion" placeholder="Contame qué te pasa..."></textarea>
   <button class="enviar" onclick="iniciarEscucha()">🎙️ Dictar confesión</button>
   <button class="enviar" onclick="enviarConfesion()">🙏 Enviar confesión</button>
-  <div id="respuesta" class="chat"></div>
+
+  <div id="respuesta"></div>
 </div>
 
+<!-- Botón donar -->
 <button id="btnDonar" title="Ayudá a sostener este espacio">💚</button>
 <div id="popupDonar">
   <p>Si esta confesión te ayudó, podés hacer una donación voluntaria. Gracias por sostener este espacio 🙏</p>
   <a href="https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=TU_PREF_ID" target="_blank">Hacer una donación</a>
 </div>
 
+<!-- Botón compartir -->
 <button id="btnCompartir" title="Compartí con alguien que lo necesite">📤</button>
 
+<!-- Scripts -->
 <script>
   function cerrarPrivacidad() {
     document.getElementById('bannerPrivacidad').style.display = 'none';
     document.getElementById('confesionario').style.display = 'block';
   }
 
-  function agregarMensaje(texto, autor = 'usuario') {
-    const chat = document.getElementById('respuesta');
-    const mensaje = document.createElement('div');
-    mensaje.className = `mensaje ${autor}`;
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar';
-    avatar.textContent = autor === 'usuario' ? 'Tú' : '✝️';
-    const textoDiv = document.createElement('div');
-    textoDiv.className = 'texto';
-    textoDiv.textContent = texto;
-    mensaje.appendChild(avatar);
-    mensaje.appendChild(textoDiv);
-    chat.appendChild(mensaje);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
   async function enviarConfesion() {
     const texto = document.getElementById('confesion').value.trim();
-    if (!texto) return;
-    agregarMensaje(texto, 'usuario');
-    document.getElementById('confesion').value = '';
-    agregarMensaje("Padre IANN está reflexionando...", 'iann');
+    const respuestaDiv = document.getElementById('respuesta');
+
+    if (!texto) {
+      respuestaDiv.textContent = "Por favor, escribí algo.";
+      return;
+    }
+
+    respuestaDiv.textContent = "Padre IANN está reflexionando...";
 
     try {
       const response = await fetch("/.netlify/functions/api", {
@@ -247,10 +198,11 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pregunta: texto })
       });
+
       const data = await response.json();
-      document.querySelectorAll('.mensaje.iann .texto').slice(-1)[0].textContent = data.respuesta || "No pude responderte esta vez.";
-    } catch {
-      document.querySelectorAll('.mensaje.iann .texto').slice(-1)[0].textContent = "Hubo un error interno. Probá más tarde.";
+      respuestaDiv.textContent = data.respuesta || "No pude responderte esta vez.";
+    } catch (error) {
+      respuestaDiv.textContent = "Hubo un error interno. Probá más tarde.";
     }
   }
 
@@ -259,31 +211,43 @@
       alert("Tu navegador no soporta reconocimiento de voz.");
       return;
     }
+
     const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     reconocimiento.lang = 'es-AR';
     reconocimiento.interimResults = false;
     reconocimiento.maxAlternatives = 1;
+
     reconocimiento.onresult = function(event) {
-      document.getElementById("confesion").value = event.results[0][0].transcript;
+      const textoDetectado = event.results[0][0].transcript;
+      document.getElementById("confesion").value = textoDetectado;
     };
-    reconocimiento.onerror = function() {
+
+    reconocimiento.onerror = function(event) {
       alert("No se pudo usar el micrófono. Probá de nuevo.");
     };
+
     reconocimiento.start();
   }
 
-  document.getElementById("btnDonar").onclick = () => {
-    const popup = document.getElementById("popupDonar");
-    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+  // Botón Donar
+  const btnDonar = document.getElementById("btnDonar");
+  const popupDonar = document.getElementById("popupDonar");
+
+  btnDonar.onclick = () => {
+    popupDonar.style.display = popupDonar.style.display === 'none' ? 'block' : 'none';
   };
 
-  document.getElementById("btnCompartir").onclick = async () => {
+  // Botón Compartir
+  const btnCompartir = document.getElementById("btnCompartir");
+
+  btnCompartir.onclick = async () => {
     const url = window.location.href;
     const texto = "Probá el confesionario digital del Padre IANN. Te puede hacer bien. 🙏";
+
     if (navigator.share) {
       try {
         await navigator.share({ title: "Padre IANN", text: texto, url });
-      } catch {
+      } catch (err) {
         alert("No se pudo compartir.");
       }
     } else {
