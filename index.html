@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <title>Padre IANN | Confesionario Digital</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
   <style>
     * {
       box-sizing: border-box;
     }
-    
+    html, body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
      html, body {
       margin: 0;
       padding: 0;
@@ -363,8 +367,13 @@ padding-right: 6px;
   function cerrarPrivacidad() {
     document.getElementById('bannerPrivacidad').style.display = 'none';
     document.getElementById('confesionario').style.display = 'block';
+    
   }
-
+setTimeout(() => {
+  const chat = document.getElementById("chatArea");
+  chat.scrollTo({ top: chat.scrollHeight });
+}, 100);
+  
   function autoExpand(field) {
     field.style.height = 'auto';
     field.style.height = (field.scrollHeight) + 'px';
