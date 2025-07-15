@@ -29,7 +29,7 @@ exports.handler = async function (event) {
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: messages,
-        temperature: 0.85
+        temperature: 0.70
       })
     });
 
