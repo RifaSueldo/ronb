@@ -335,6 +335,24 @@ padding-right: 6px;
   background: #077D69;
   transform: scale(1.1);
 }
+.mensaje-con-avatar {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.mensaje.padre {
+  border-radius: 20px 20px 20px 5px;
+}
+
+.avatar-padre {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 0 3px rgba(0,0,0,0.3);
+}
 
 
   </style>
@@ -392,26 +410,61 @@ padding-right: 6px;
 
 <script>
  function agregarMensaje(texto, tipo = "padre") {
+  const chat = document.getElementById("chatArea");
+
+  const contenedor = document.createElement("div");
+  contenedor.className = "mensaje-con-avatar";
+
   const burbuja = document.createElement("div");
   burbuja.className = `mensaje ${tipo}`;
   burbuja.textContent = texto;
 
-  const chat = document.getElementById("chatArea");
-  chat.appendChild(burbuja);
+  if (tipo === "padre") {
+    const avatar = document.createElement("img");
+    avatar.src = "padre-iann.png"; // Cambiá si usás link externo
+    avatar.alt = "Padre IANN";
+    avatar.className = "avatar-padre";
+    contenedor.appendChild(avatar);     // avatar a la izquierda
+    contenedor.appendChild(burbuja);    // burbuja a la derecha
+    contenedor.style.justifyContent = "flex-start";
+  } else {
+    contenedor.appendChild(burbuja);    // burbuja sola
+    contenedor.style.justifyContent = "flex-end";
+  }
 
-  // Scroll automático y suave al final, usando scrollTo con behavior
+  chat.appendChild(contenedor);
   setTimeout(() => {
-    chat.scrollTo({
-      top: chat.scrollHeight,
-      behavior: 'smooth'
-    });
+    chat.scrollTop = chat.scrollHeight;
   }, 50);
 }
 
 
   function cerrarPrivacidad() {
-    document.getElementById('bannerPrivacidad').style.display = 'none';
-    document.getElementById('confesionario').style.display = 'block';
+  document.getElementById('bannerPrivacidad').style.display = 'none';
+  document.getElementById('confesionario').style.display = 'block';
+
+  // Obtener hora local
+  const hora = new Date().getHours();
+  let saludo;
+
+  if (hora >= 6 && hora < 12) {
+    saludo = "Buen día";
+  } else if (hora >= 12 && hora < 19) {
+    saludo = "Buenas tardes";
+  } else {
+    saludo = "Buenas noches";
+  }
+
+  // Mostrar mensajes de bienvenida de Padre IANN
+  agregarMensaje(`${saludo}, hijo/a.`, "padre");
+  setTimeout(() => {
+    agregarMensaje("En el nombre del Padre, del Hijo y del Espíritu Santo, amén 🙏", "padre");
+  }, 1000);
+  setTimeout(() => {
+    agregarMensaje("Estoy aquí para escucharte. Contame qué te pasa…", "padre");
+  }, 2000);
+
+
     setTimeout(() => {
   const chat = document.getElementById("chatArea");
   chat.scrollTo({ top: chat.scrollHeight });
