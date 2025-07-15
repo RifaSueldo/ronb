@@ -378,7 +378,7 @@ padding-right: 6px;
   </div>
 
   <div id="inputArea">
-    <textarea id="confesion" placeholder=". . . . . . . . . . " rows="1" oninput="autoExpand(this)"></textarea>
+    <textarea id="confesion" placeholder="Tu confesión. . . . . . . ." rows="1" oninput="autoExpand(this)"></textarea>
     <!-- <button class="enviar" title="Dictar confesión" onclick="iniciarEscucha()">🎙️</button> -->
     <button class="enviar" title="Enviar confesión" onclick="enviarConfesion()"><i class="fa-solid fa-book-bible"></i></button>
   </div>
@@ -458,10 +458,10 @@ padding-right: 6px;
   // Mostrar mensajes de bienvenida de Padre IANN
   agregarMensaje(`${saludo}, Padre Iann de este lado`, "padre");
   setTimeout(() => {
-    agregarMensaje("En el nombre del Padre, del Hijo y del Espíritu Santo, amén 🙏", "padre");
+    agregarMensaje("En el nombre del Padre, del Hijo y del Espíritu Santo, amén", "padre");
   }, 1000);
   setTimeout(() => {
-    agregarMensaje("Cómo estás? Hablá con libertad, esta charla es %100 privada. Contame....", "padre");
+    agregarMensaje("Cómo estás? Hablá con libertad, esta charla es sólo entre Dios, vos y yo. Contame....", "padre");
   }, 2000);
 
 
