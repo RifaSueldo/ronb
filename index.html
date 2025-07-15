@@ -13,7 +13,8 @@
       margin: 0;
       padding: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #000000;
+      background: radial-gradient(circle at 50% 50%, #311840, #120222 70%);
+  
       color: #fff;
       height: 100vh;
       width: 100%;
@@ -34,9 +35,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('https://media.istockphoto.com/id/540971362/es/foto/metaf%C3%B3rica-vitrales.jpg?s=612x612&w=0&k=20&c=PyKPEILB9UC5eweCYf0Q6aTEAXI10-zYmFxtbjRsiqI='); 
+  background-image: url('https://i.ibb.co/XZ1Nffx3/fondo-capilla-digital.jpg'); 
   background-size: cover;
-  opacity: 0.05;
+  opacity: 0.25;
   z-index: 1;
   pointer-events: none;
 }
@@ -49,14 +50,14 @@
       box-shadow: 0 0 20px #0f0;
       color: #fff;
       animation: entradaLuminosa 2.6s ease-out both;
-  background: radial-gradient(circle at top, #1C0731, #150129);
+  background: radial-gradient(circle at top, #1C0731, #4c2c6d);
   position: relative;
       z-index: 2;
     }
 
     #popup h2 {
       margin-top: 0;
-      color: #311840;
+      color: #fff;
       animation: resplandorEclesiastico 3s ease-in-out infinite;
   font-size: 1.8rem;
   letter-spacing: 1px;
@@ -114,6 +115,7 @@
     }
 
    #confesionario .logo {
+     position: fixed;
   width: 100%;
   height: 60px;
   background: #311840;
@@ -121,6 +123,8 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
+  z-index: 1000;
+     
 }
 
 #confesionario .logo img {
@@ -132,6 +136,9 @@
 
     #chatArea {
   display: flex;
+      padding-top: 66px;
+      padding-left: 6px;
+padding-right: 6px;
   flex-direction: column;
   overflow-y: auto;
   height: 100%;  /* o flex: 1 si usás flexbox */
@@ -154,8 +161,8 @@
 
     .mensaje.usuario {
       align-self: flex-end;
-      background-color: #dcf8c6;
-      color: #111;
+      background-color: #2CAA95;
+      color: #062E27;
       border-bottom-right-radius: 5px;
       border-bottom-left-radius: 20px;
       border-top-left-radius: 20px;
@@ -164,8 +171,8 @@
 
     .mensaje.padre {
       align-self: flex-start;
-      background-color: #2a3942;
-      color: #e1e1e1;
+      background-color: #07010D;
+      color: #BEAFCC;
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 20px;
       border-top-right-radius: 20px;
@@ -183,7 +190,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
-      background:#150129;
+      background:#311840;
       padding: 10px 15px;
       display: flex;
       gap: 8px;
@@ -201,22 +208,22 @@
       border-radius: 20px;
       border: none;
       resize: none;
-      background: #323c42;
-      color: white;
+      background: #090612;
+      color: #fff;
       font-family: inherit;
       outline: none;
-      box-shadow: inset 0 1px 1px rgb(0 0 0 / 0.2);
+      box-shadow: inset 0 1px 1px rgb(239, 110, 60 / 0.2);
       transition: background 0.3s;
     }
     textarea#confesion::placeholder {
-      color: #bbb;
+      color: #fff;
     }
     textarea#confesion:focus {
-      background: #4a5a63;
+      background: #2CAA95;
     }
 
     button.enviar {
-      background: #25d366;
+      background: #2CAA95;
       border: none;
       border-radius: 50%;
       width: 40px;
@@ -232,7 +239,7 @@
       box-shadow: 0 2px 5px rgb(0 0 0 / 0.3);
     }
 
-    button.enviar:hover { background: #1ebe57; }
+    button.enviar:hover { background: #077D69; }
     button.enviar:active { background: #189e43; }
     button.enviar[disabled] {
       background: #9de4b3;
@@ -321,18 +328,18 @@
 
   <div id="inputArea">
     <textarea id="confesion" placeholder="Contame qué te pasa..." rows="1" oninput="autoExpand(this)"></textarea>
-    <button class="enviar" title="Dictar confesión" onclick="iniciarEscucha()">🎙️</button>
+    <!-- <button class="enviar" title="Dictar confesión" onclick="iniciarEscucha()">🎙️</button> -->
     <button class="enviar" title="Enviar confesión" onclick="enviarConfesion()">🙏</button>
   </div>
 </div>
 
-<button id="btnDonar" title="Ayudá a sostener este espacio">💚</button>
+<!-- <button id="btnDonar" title="Ayudá a sostener este espacio">💚</button>
 <div id="popupDonar">
   <p>Si esta confesión te ayudó, podés hacer una donación voluntaria 🙏</p>
   <a href="https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=TU_PREF_ID" target="_blank">Hacer una donación</a>
 </div>
 
-<button id="btnCompartir" title="Compartí con alguien que lo necesite">📤</button>
+<button id="btnCompartir" title="Compartí con alguien que lo necesite">📤</button> -->
 
 <script>
  function agregarMensaje(texto, tipo = "padre") {
