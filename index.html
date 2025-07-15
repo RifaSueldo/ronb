@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <title>Capilla Digital</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
 <!-- Open Graph para redes sociales como Facebook, WhatsApp -->
 <meta property="og:title" content="Capilla Digital" />
 <meta property="og:description" content="Un espacio íntimo para soltar lo que pesa. Hablar sin juzgar, sin filtro, con el alma." />
@@ -263,66 +266,77 @@ padding-right: 6px;
       cursor: not-allowed;
     }
 
-    #btnDonar, #btnCompartir {
-      position: fixed;
-      bottom: 80px;
-      width: 50px;
-      height: 50px;
-      font-size: 28px;
-      border: none;
-      border-radius: 50%;
-      background: #202c33;
-      color: #25d366;
-      box-shadow: 0 0 8px #25d366;
-      cursor: pointer;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-      transition: background 0.3s;
-    }
+#pestaniaAccesoRapido {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 9999;
+}
 
-    #btnDonar:hover, #btnCompartir:hover {
-      background: #25d366;
-      color: #111;
-      box-shadow: 0 0 15px #25d366;
-    }
+#pestaniaToggle {
+  background: #2CAA95;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  color: white;
+  padding: 14px 16px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s;
+}
 
-    #btnDonar { left: 20px; }
-    #btnCompartir { right: 20px; }
+#pestaniaToggle:hover {
+  background: #4c2c6d;
+}
 
-    #popupDonar {
-      position: fixed;
-      bottom: 140px;
-      left: 20px;
-      width: 280px;
-      background: #1e2a35;
-      color: #d1d1d1;
-      padding: 15px;
-      border-radius: 10px;
-      display: none;
-      z-index: 9999;
-      box-shadow: 0 0 15px #25d366;
-      font-size: 14px;
-      line-height: 1.4;
-    }
+#pestaniaIconos {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%) translateX(20px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #1b1029;
+  padding: 15px 10px;
+  border-radius: 12px 0 0 12px;
+  box-shadow: 0 0 18px #2f005e88;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
 
-    #popupDonar a {
-      display: inline-block;
-      margin-top: 10px;
-      background: #25d366;
-      padding: 10px 15px;
-      color: #111;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: 600;
-      transition: background 0.3s;
-    }
+#pestaniaAccesoRapido.activo #pestaniaIconos {
+  transform: translateY(-50%) translateX(-30%);
+  opacity: 1;
+  pointer-events: auto;
+}
 
-    #popupDonar a:hover {
-      background: #1ebe57;
-    }
+#pestaniaIconos a,
+#pestaniaIconos button {
+  all: unset;
+  background: #311840;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.3s;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00000044;
+}
+
+#pestaniaIconos a:hover,
+#pestaniaIconos button:hover {
+  background: #077D69;
+  transform: scale(1.1);
+}
+
+
   </style>
 </head>
 <body>
@@ -348,17 +362,33 @@ padding-right: 6px;
   <div id="inputArea">
     <textarea id="confesion" placeholder="Escribime, estoy disponible" rows="1" oninput="autoExpand(this)"></textarea>
     <!-- <button class="enviar" title="Dictar confesión" onclick="iniciarEscucha()">🎙️</button> -->
-    <button class="enviar" title="Enviar confesión" onclick="enviarConfesion()">🙏</button>
+    <button class="enviar" title="Enviar confesión" onclick="enviarConfesion()"><i class="fa-solid fa-book-bible"></i></button>
   </div>
 </div>
 
-<!-- <button id="btnDonar" title="Ayudá a sostener este espacio">💚</button>
-<div id="popupDonar">
-  <p>Si esta confesión te ayudó, podés hacer una donación voluntaria 🙏</p>
-  <a href="https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=TU_PREF_ID" target="_blank">Hacer una donación</a>
+ <div id="pestaniaAccesoRapido">
+  <button id="pestaniaToggle"><i class="fas fa-ellipsis-v"></i></button>
+  <div id="pestaniaIconos">
+    <a href="https://www.instagram.com/tu_usuario" target="_blank" title="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://wa.me/549XXXXXXXXXX" target="_blank" title="WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <button onclick="compartirConfesionario()" title="Compartir">
+      <i class="fas fa-share-alt"></i>
+    </button>
+    
+    <a href="https://mpago.la/TU-LINK-DE-PAGO" target="_blank" title="Ayudanos" id="btnFlotanteDonar">
+  <i class="fas fa-hand-holding-heart"></i>
+</a>
+  </div>
 </div>
 
-<button id="btnCompartir" title="Compartí con alguien que lo necesite">📤</button> -->
+
+
+
+
 
 <script>
  function agregarMensaje(texto, tipo = "padre") {
@@ -471,27 +501,40 @@ Evitá usar palabras como "aquí", "usted", "estimado", o frases de manual. Habl
     reconocimiento.start();
   }
 
-  const btnDonar = document.getElementById("btnDonar");
-  const popupDonar = document.getElementById("popupDonar");
-  btnDonar.onclick = () => {
-    popupDonar.style.display = popupDonar.style.display === 'none' ? 'block' : 'none';
-  };
+document.getElementById("pestaniaToggle").onclick = () => {
+  document.getElementById("pestaniaAccesoRapido").classList.toggle("activo");
+};
 
-  const btnCompartir = document.getElementById("btnCompartir");
-  btnCompartir.onclick = async () => {
-    const url = window.location.href;
-    const texto = "Probá el confesionario digital del Padre IANN. Te puede hacer bien. 🙏";
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: "Padre IANN", text: texto, url });
-      } catch {
-        alert("No se pudo compartir.");
-      }
-    } else {
-      navigator.clipboard.writeText(url);
-      alert("Enlace copiado para compartir 🙌");
+const textarea = document.getElementById('confesion');
+
+  textarea.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      enviarConfesion();
     }
-  };
+  });  
+</script>
+<script>
+  function compartirConfesionario() {
+    const url = window.location.href;
+    const mensaje = "Probá el confesionario digital del Padre IANN. Te puede hacer bien. 🙏";
+
+    if (navigator.share) {
+      navigator.share({
+        title: "Padre IANN",
+        text: mensaje,
+        url: url
+      }).catch(() => {
+        alert("No se pudo compartir.");
+      });
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        alert("Enlace copiado para compartir 🙌");
+      }).catch(() => {
+        alert("No se pudo copiar el enlace.");
+      });
+    }
+  }
 </script>
 
 </body>
