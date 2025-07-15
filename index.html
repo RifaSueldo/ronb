@@ -367,13 +367,13 @@ padding-right: 6px;
   function cerrarPrivacidad() {
     document.getElementById('bannerPrivacidad').style.display = 'none';
     document.getElementById('confesionario').style.display = 'block';
-    
-  }
-setTimeout(() => {
+    setTimeout(() => {
   const chat = document.getElementById("chatArea");
   chat.scrollTo({ top: chat.scrollHeight });
 }, 100);
   
+  }
+
   function autoExpand(field) {
     field.style.height = 'auto';
     field.style.height = (field.scrollHeight) + 'px';
