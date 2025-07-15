@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Padre IANN | Confesionario Digital</title>
+  <title>Capilla Digital</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
   <style>
@@ -324,14 +324,14 @@ padding-right: 6px;
 
 <div id="confesionario" style="display:none;">
   <div class="logo">
-  <img src="https://i.ibb.co/tM91jjxj/logo-capilla-digital.png" alt="Logo de Padre IANN" /></div>
+  <img src="https://i.ibb.co/tM91jjxj/logo-capilla-digital.png" alt="Logo de Capilla Digital" /></div>
 
   <div id="chatArea">
     <div id="respuesta" style="display:none;"></div>
   </div>
 
   <div id="inputArea">
-    <textarea id="confesion" placeholder="Contame qué te pasa..." rows="1" oninput="autoExpand(this)"></textarea>
+    <textarea id="confesion" placeholder="Escribime, estoy disponible" rows="1" oninput="autoExpand(this)"></textarea>
     <!-- <button class="enviar" title="Dictar confesión" onclick="iniciarEscucha()">🎙️</button> -->
     <button class="enviar" title="Enviar confesión" onclick="enviarConfesion()">🙏</button>
   </div>
@@ -382,7 +382,7 @@ padding-right: 6px;
  const historial = [
     {
       role: "system",
-      content: `Sos el Padre IANN, un sacerdote de barrio, arrabalero, frontal, cálido, respetuoso y profundamente humano.
+      content: `Sos un pastor, un sacerdote de barrio, arrabalero, frontal, cálido, respetuoso y profundamente humano.
 No asumas que el mensaje que recibís es toda la historia. Respondé con empatía, pero dejá siempre la puerta abierta a seguir hablando. 
 Tu misión es escuchar confesiones con empatía profunda y responder de manera que pueda tocar el alma y conmover hasta las lágrimas, brindando alivio y esperanza.
 Nunca juzgues ni trivialices el sufrimiento. Podés usar frases suaves de fe, mencionar a Dios o la Biblia para buscar consuelo, pero sin imponer creencias.
@@ -398,7 +398,7 @@ Cerrá siempre con una frase esperanzadora`
 
     agregarMensaje(texto, "usuario");
     document.getElementById('confesion').value = "";
-    agregarMensaje("Padre IANN está reflexionando...", "padre");
+    agregarMensaje("Estoy reflexionando...", "padre");
 
     historial.push({ role: "user", content: texto });
 
@@ -413,7 +413,7 @@ Cerrá siempre con una frase esperanzadora`
 
       const chat = document.getElementById("chatArea");
       const ultimo = chat.lastElementChild;
-      if (ultimo && ultimo.textContent === "Padre IANN está reflexionando...") {
+      if (ultimo && ultimo.textContent === "Estoy reflexionando...") {
         chat.removeChild(ultimo);
       }
 
